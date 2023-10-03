@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * 用户表
@@ -14,6 +15,7 @@ import lombok.Data;
  */
 @TableName(value ="t_user")
 @Data
+@Accessors(chain = true)
 public class User implements Serializable {
     /**
      * 主键id
@@ -75,11 +77,6 @@ public class User implements Serializable {
     @TableField(value = "birth")
     private String birth;
 
-    /**
-     * 角色id
-     */
-    @TableField(value = "role_id")
-    private Long roleId;
 
     /**
      * 创建时间
@@ -118,7 +115,6 @@ public class User implements Serializable {
             && (this.getSign() == null ? other.getSign() == null : this.getSign().equals(other.getSign()))
             && (this.getGender() == null ? other.getGender() == null : this.getGender().equals(other.getGender()))
             && (this.getBirth() == null ? other.getBirth() == null : this.getBirth().equals(other.getBirth()))
-            && (this.getRoleId() == null ? other.getRoleId() == null : this.getRoleId().equals(other.getRoleId()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
     }
@@ -137,7 +133,6 @@ public class User implements Serializable {
         result = prime * result + ((getSign() == null) ? 0 : getSign().hashCode());
         result = prime * result + ((getGender() == null) ? 0 : getGender().hashCode());
         result = prime * result + ((getBirth() == null) ? 0 : getBirth().hashCode());
-        result = prime * result + ((getRoleId() == null) ? 0 : getRoleId().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         return result;
@@ -159,7 +154,6 @@ public class User implements Serializable {
         sb.append(", sign=").append(sign);
         sb.append(", gender=").append(gender);
         sb.append(", birth=").append(birth);
-        sb.append(", roleId=").append(roleId);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);

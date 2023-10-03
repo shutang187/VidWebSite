@@ -1,7 +1,9 @@
 package com.tangxs.bilibili.util;
 
-import jakarta.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -10,6 +12,7 @@ import java.net.UnknownHostException;
  * @Description ip工具类
  * @Date 2023/10/2 22:33
  **/
+@Component
 public class IpUtil {
 
     public static String getIpAddr(HttpServletRequest request) {

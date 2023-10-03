@@ -1,12 +1,15 @@
 package com.tangxs.bilibili.util;
 
+import cn.hutool.core.util.StrUtil;
 import com.tangxs.bilibili.filter.HTMLFilter;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author tangxs
  * @Description 转义和反转义工具类
  * @Date 2023/10/2 22:35
  **/
+@Component
 public class EscapeUtil {
 
     public static final String RE_HTML_MARK = "(<[^<]*?>)|(<[\\s]*?/[^<]*?>)|(<[^<]*?/[\\s]*?>)";
@@ -65,7 +68,7 @@ public class EscapeUtil {
     private static String encode(String text) {
         int len;
         if ((text == null) || ((len = text.length()) == 0)) {
-            return StringUtils.NULLSTR;
+            return StrUtil.EMPTY;
         }
         StringBuilder buffer = new StringBuilder(len + (len >> 2));
         char c;
@@ -87,7 +90,7 @@ public class EscapeUtil {
      * @return 解码后的字符串
      */
     public static String decode(String content) {
-        if (StringUtils.isEmpty(content)) {
+        if (StrUtil.isEmpty(content)) {
             return content;
         }
 

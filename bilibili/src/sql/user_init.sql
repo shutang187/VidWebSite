@@ -4,7 +4,7 @@ CREATE TABLE `t_user` (
                           `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
                           `phone` varchar(100) DEFAULT NULL COMMENT '手机号',
                           `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
-                          `password` varchar(255) DEFAULT NULL COMMENT '密码',
+                          `password` varchar(255) NOT NULL COMMENT '密码',
                           `salt` varchar(50) DEFAULT NULL COMMENT '盐值',
                           `nick` varchar(100) DEFAULT NULL COMMENT '昵称',
                           `avatar` varchar(1024) DEFAULT NULL COMMENT '头像',
@@ -84,6 +84,15 @@ CREATE TABLE `t_auth_role` (
                                `code` varchar(50) DEFAULT NULL COMMENT '唯一编码',
                                PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='权限控制--角色表';
+
+DROP TABLE IF EXISTS `t_user_role`;
+CREATE TABLE `t_user_role` (
+                               `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+                               `user_id` bigint DEFAULT NULL COMMENT '用户id',
+                               `role_id` bigint DEFAULT NULL COMMENT '角色id',
+                               `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                               PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='用户角色关联表';
 
 DROP TABLE IF EXISTS `t_auth_menu`;
 CREATE TABLE `t_auth_menu` (

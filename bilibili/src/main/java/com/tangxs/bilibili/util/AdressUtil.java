@@ -4,6 +4,7 @@ import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 /**
  * @Author tangxs
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date 2023/10/2 23:01
  **/
 @Slf4j
+@Component
 public class AdressUtil {
 
     // IP地址查询

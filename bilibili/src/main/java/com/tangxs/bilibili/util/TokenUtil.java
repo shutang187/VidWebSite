@@ -10,13 +10,14 @@ import com.tangxs.bilibili.constant.enums.ExceptionCode;
 import com.tangxs.bilibili.domain.model.LoginUser;
 import com.tangxs.bilibili.exception.GlobalException;
 import eu.bitwalker.useragentutils.UserAgent;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -28,6 +29,7 @@ import java.util.concurrent.TimeUnit;
  * @Date 2023/10/2 10:01
  **/
 @Slf4j
+@Component
 public class TokenUtil {
 
     protected static final long MILLIS_SECOND = 1000;
@@ -43,10 +45,10 @@ public class TokenUtil {
     private static int expireTime;
 
     @Autowired
-    private RedisCacheUtil redisCache;
+    private static RedisCacheUtil redisCache;
 
 
-    public static String generateToken(String userId){
+    public static String generateToken(Long userId) throws Exception{
         Algorithm rsa256 = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
         Calendar instance = Calendar.getInstance();
         instance.setTime(new Date());
@@ -57,7 +59,7 @@ public class TokenUtil {
                 .sign(rsa256);
     }
 
-    public static Long verifyToken(String token){
+    public static Long verifyToken(String token) throws Exception{
         try {
             Algorithm rsa256 = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
             JWTVerifier jwtVerifier = JWT.require(rsa256).build();
@@ -69,16 +71,21 @@ public class TokenUtil {
         }
     }
 
-    private String getTokenKey(Long userId){
+    private static String getTokenKey(Long userId){
         if (userId == null) {
             return null;
         }
         return RedisKeyPrefix.LOGIN_TOKRN_KEY_PREFIX + String.valueOf(userId);
     }
 
+    public Long getLoginUserId (HttpServletRequest request) throws Exception{
+        String token = request.getHeader(header);
+        Long userId = verifyToken(token);
+        return userId;
+    }
 
 
-    public LoginUser getLoginUser(HttpServletRequest request){
+    public LoginUser getLoginUser(HttpServletRequest request) throws Exception{
         String token = request.getHeader(header);
         Long userId = verifyToken(token);
         if(userId != null && userId > 0){
@@ -88,21 +95,37 @@ public class TokenUtil {
         return null;
     }
 
+    public void deleteLoginUser(HttpServletRequest request) throws Exception{
+        String token = request.getHeader(header);
+        Long userId = verifyToken(token);
+        if(userId != null && userId > 0){
+           redisCache.deleteObject(getTokenKey(userId));
+        }
+    }
 
-    public void setLoginUser(LoginUser user){
+    public LoginUser getLoginUser(Long userId){
+        if(userId != null && userId > 0){
+            LoginUser user = (LoginUser) redisCache.getCacheObject(getTokenKey(userId));
+            return user;
+        }
+        return null;
+    }
+
+
+    public static void setLoginUser(LoginUser user){
         if(Objects.nonNull(user)){
             refreshToken(user);
         }
     }
 
-    private void refreshToken(LoginUser user) {
+    private static void refreshToken(LoginUser user) {
         user.setLoginTime(System.currentTimeMillis());
         user.setExpireTime(user.getLoginTime() + expireTime * MILLIS_MINUTE);
         String tokenKey = getTokenKey(user.getUserId());
         redisCache.setCacheObject(tokenKey,user,expireTime, TimeUnit.MINUTES);
     }
 
-    public void setUserAgent(LoginUser loginUser){
+    public void setUserAgent(LoginUser loginUser) throws Exception{
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes)RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));

@@ -1,5 +1,6 @@
 package com.tangxs.bilibili.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tangxs.bilibili.domain.dao.AuthRole;
 import com.tangxs.bilibili.service.AuthRoleService;
@@ -15,6 +16,10 @@ import org.springframework.stereotype.Service;
 public class AuthRoleServiceImpl extends ServiceImpl<AuthRoleMapper, AuthRole>
     implements AuthRoleService{
 
+    @Override
+    public AuthRole getRoleByCode(String roleLv0) {
+        return this.getOne(new QueryWrapper<AuthRole>().eq("code",roleLv0));
+    }
 }
 
 

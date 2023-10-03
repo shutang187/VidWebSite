@@ -1,7 +1,6 @@
 package com.tangxs.bilibili.domain.model;
 
 import com.tangxs.bilibili.domain.dao.User;
-import jakarta.annotation.security.DenyAll;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

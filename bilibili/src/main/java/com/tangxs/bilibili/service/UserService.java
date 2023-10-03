@@ -2,6 +2,11 @@ package com.tangxs.bilibili.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tangxs.bilibili.domain.dao.User;
+import com.tangxs.bilibili.domain.model.ResponseBean;
+import com.tangxs.bilibili.domain.vo.LoginUserVo;
+import com.tangxs.bilibili.domain.vo.UserInfoVo;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
 * @author tangxs
@@ -10,4 +15,14 @@ import com.tangxs.bilibili.domain.dao.User;
 */
 public interface UserService extends IService<User> {
 
+
+    void register(LoginUserVo loginUserVo);
+
+    String login(LoginUserVo loginUserVo) throws Exception;
+
+    UserInfoVo getCurrentUserInfo(HttpServletRequest httpServletRequest);
+
+    void updateUserInfo(UserInfoVo userInfoVo,HttpServletRequest httpServletRequest);
+
+    void logout(HttpServletRequest httpServletRequest);
 }

@@ -10,4 +10,5 @@ import com.tangxs.bilibili.domain.dao.AuthRole;
 */
 public interface AuthRoleService extends IService<AuthRole> {
 
+    AuthRole getRoleByCode(String roleLv0);
 }

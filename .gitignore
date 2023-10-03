@@ -1,3 +1,6 @@
-.idea
+.idea/
 *.iml
 .gitignore
+bilibili/bilibili.iml
+bilibili/.mvn
+bilibili/target/

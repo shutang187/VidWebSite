@@ -2,6 +2,7 @@ package com.tangxs.bilibili.util;
 
 import cn.hutool.core.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import javax.net.ssl.*;
 import java.io.*;
@@ -17,6 +18,7 @@ import java.security.cert.X509Certificate;
  * @Date 2023/10/2 23:04
  **/
 @Slf4j
+@Component
 public class HttpUtil {
 
 
