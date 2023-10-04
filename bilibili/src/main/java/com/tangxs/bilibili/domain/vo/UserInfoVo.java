@@ -2,6 +2,7 @@ package com.tangxs.bilibili.domain.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * @Date 2023/10/3 17:49
  **/
 @Data
-public class UserInfoVo {
+public class UserInfoVo implements Serializable {
 
 
     /**
@@ -48,14 +49,4 @@ public class UserInfoVo {
      */
     private String birth;
 
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
 }

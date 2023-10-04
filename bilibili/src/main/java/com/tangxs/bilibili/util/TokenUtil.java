@@ -42,13 +42,13 @@ public class TokenUtil {
 
     // 令牌有效期（默认30分钟）
     @Value("${token.expireTime}")
-    private static int expireTime;
+    private int expireTime;
 
     @Autowired
-    private static RedisCacheUtil redisCache;
+    private RedisCacheUtil redisCache;
 
 
-    public static String generateToken(Long userId) throws Exception{
+    public String generateToken(Long userId) throws Exception{
         Algorithm rsa256 = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
         Calendar instance = Calendar.getInstance();
         instance.setTime(new Date());
@@ -59,7 +59,7 @@ public class TokenUtil {
                 .sign(rsa256);
     }
 
-    public static Long verifyToken(String token) throws Exception{
+    public Long verifyToken(String token) throws Exception{
         try {
             Algorithm rsa256 = Algorithm.RSA256(RSAUtil.getPublicKey(), RSAUtil.getPrivateKey());
             JWTVerifier jwtVerifier = JWT.require(rsa256).build();
@@ -71,7 +71,7 @@ public class TokenUtil {
         }
     }
 
-    private static String getTokenKey(Long userId){
+    public static String getTokenKey(Long userId){
         if (userId == null) {
             return null;
         }
@@ -103,6 +103,7 @@ public class TokenUtil {
         }
     }
 
+
     public LoginUser getLoginUser(Long userId){
         if(userId != null && userId > 0){
             LoginUser user = (LoginUser) redisCache.getCacheObject(getTokenKey(userId));
@@ -112,13 +113,13 @@ public class TokenUtil {
     }
 
 
-    public static void setLoginUser(LoginUser user){
+    public  void setLoginUser(LoginUser user){
         if(Objects.nonNull(user)){
             refreshToken(user);
         }
     }
 
-    private static void refreshToken(LoginUser user) {
+    private void refreshToken(LoginUser user) {
         user.setLoginTime(System.currentTimeMillis());
         user.setExpireTime(user.getLoginTime() + expireTime * MILLIS_MINUTE);
         String tokenKey = getTokenKey(user.getUserId());

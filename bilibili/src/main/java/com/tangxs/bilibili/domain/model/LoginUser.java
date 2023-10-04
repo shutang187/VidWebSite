@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUser extends User {
+public class LoginUser {
 
     /**
      * 用户ID

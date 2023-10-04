@@ -25,6 +25,7 @@ import com.tangxs.bilibili.util.*;
 import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -54,6 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private TokenUtil tokenUtil;
 
     @Override
+    @Transactional
     public void register(LoginUserVo loginUserVo) {
         String phone = loginUserVo.getPhone();
         if (StrUtil.isEmpty(phone)) {
@@ -90,7 +92,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
 
         User user = getUserByPhone(phone);
-        if (user != null) {
+        if (user == null) {
             throw new GlobalException("当前用户不存在");
         }
 
@@ -104,10 +106,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!user.getPassword().equals(md5Password)){
             throw new GlobalException("密码错误");
         }
-        String token = TokenUtil.generateToken(user.getId());
+        String token = tokenUtil.generateToken(user.getId());
         LoginUser loginUser = new LoginUser();
         loginUser.setUserId(user.getId());
-        TokenUtil.setLoginUser(loginUser);
+        loginUser.setUser(user);
+        tokenUtil.setLoginUser(loginUser);
         return token;
     }
 
@@ -120,12 +123,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new GlobalException("token 非法");
         }
         LoginUser loginUser = tokenUtil.getLoginUser(loginUserId);
-        User user;
         if (loginUser == null){
-            user = this.getById(loginUserId);
-        }else {
-            user = loginUser.getUser();
+             throw new GlobalException("token失效，请重新登录");
         }
+        User user = loginUser.getUser();
         UserInfoVo userInfoVo = BeanUtil.copyProperties(user, UserInfoVo.class);
         return userInfoVo;
     }
@@ -141,6 +142,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User user = BeanUtil.copyProperties(userInfoVo, User.class);
         user.setId(loginUserId);
         this.updateById(user);
+        redisCacheUtil.deleteObject(TokenUtil.getTokenKey(loginUserId));
     }
 
     @Override
