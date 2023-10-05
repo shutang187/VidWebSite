@@ -3,6 +3,8 @@ package com.tangxs.bilibili.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.tangxs.bilibili.domain.dao.FollowingGroup;
 
+import java.util.List;
+
 /**
 * @author tangxs
 * @description 针对表【t_following_group(用户关注分组表)】的数据库操作Service
@@ -10,4 +12,7 @@ import com.tangxs.bilibili.domain.dao.FollowingGroup;
 */
 public interface FollowingGroupService extends IService<FollowingGroup> {
 
+    List<FollowingGroup> getGroupByUserId(Long userId);
+
+    FollowingGroup getGroupByType(String defaultGroupType);
 }

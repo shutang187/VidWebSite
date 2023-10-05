@@ -11,7 +11,7 @@ import lombok.Data;
 public enum ExceptionCode {
     SERVER_ERROR(500,"服务器内部错误"),
     SYSTEM_IS_BUSY(500,"系统繁忙"),
-    TOKEN_VERIFY_ERROR(500,"token验证失败");
+    TOKEN_VERIFY_ERROR(5001,"token验证失败");
 
     private int code;
     private String msg;

@@ -84,6 +84,13 @@ public class TokenUtil {
         return userId;
     }
 
+    public Long getLoginUserId () throws Exception{
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        String token = requestAttributes.getRequest().getHeader(header);
+        Long userId = verifyToken(token);
+        return userId;
+    }
+
 
     public LoginUser getLoginUser(HttpServletRequest request) throws Exception{
         String token = request.getHeader(header);

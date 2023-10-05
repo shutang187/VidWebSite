@@ -1,10 +1,13 @@
 package com.tangxs.bilibili.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tangxs.bilibili.domain.dao.FollowingGroup;
 import com.tangxs.bilibili.service.FollowingGroupService;
 import com.tangxs.bilibili.mapper.FollowingGroupMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
 * @author tangxs
@@ -15,6 +18,21 @@ import org.springframework.stereotype.Service;
 public class FollowingGroupServiceImpl extends ServiceImpl<FollowingGroupMapper, FollowingGroup>
     implements FollowingGroupService{
 
+    @Override
+    public List<FollowingGroup> getGroupByUserId(Long userId) {
+        QueryWrapper<FollowingGroup> followingGroupQueryWrapper = new QueryWrapper<>();
+        followingGroupQueryWrapper.eq("user_id",userId);
+        List<FollowingGroup> followingGroups = this.list(followingGroupQueryWrapper);
+        return followingGroups;
+    }
+
+    @Override
+    public FollowingGroup getGroupByType(String defaultGroupType) {
+        QueryWrapper<FollowingGroup> followingGroupQueryWrapper = new QueryWrapper<>();
+        followingGroupQueryWrapper.eq("type",defaultGroupType);
+        FollowingGroup followingGroup = this.getOne(followingGroupQueryWrapper);
+        return followingGroup;
+    }
 }
 
 
