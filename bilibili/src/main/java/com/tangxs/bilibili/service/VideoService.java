@@ -1,0 +1,13 @@
+package com.tangxs.bilibili.service;
+
+import com.tangxs.bilibili.domain.dao.Video;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+/**
+* @author tangxs
+* @description 针对表【t_video(视频投稿记录表)】的数据库操作Service
+* @createDate 2023-10-14 22:04:15
+*/
+public interface VideoService extends IService<Video> {
+
+}

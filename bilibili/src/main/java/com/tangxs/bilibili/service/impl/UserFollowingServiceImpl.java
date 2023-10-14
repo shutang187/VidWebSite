@@ -16,7 +16,6 @@ import com.tangxs.bilibili.mapper.UserFollowingMapper;
 import com.tangxs.bilibili.service.UserService;
 import com.tangxs.bilibili.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
