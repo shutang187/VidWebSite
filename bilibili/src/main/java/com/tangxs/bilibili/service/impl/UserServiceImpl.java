@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tangxs.bilibili.constant.RoleCode;
+import com.tangxs.bilibili.constant.enums.ExceptionCode;
 import com.tangxs.bilibili.domain.dao.AuthRole;
 import com.tangxs.bilibili.domain.dao.User;
 import com.tangxs.bilibili.domain.dao.UserCoin;
@@ -115,14 +116,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public UserInfoVo getCurrentUserInfo(HttpServletRequest httpServletRequest){
-        Long loginUserId;
+    public UserInfoVo getCurrentUserInfo(){
+        LoginUser loginUser = null;
         try {
-            loginUserId = tokenUtil.getLoginUserId(httpServletRequest);
+            loginUser = tokenUtil.getLoginUser();
         } catch (Exception e) {
-            throw new GlobalException("token 非法");
+            throw new GlobalException(ExceptionCode.TOKEN_VERIFY_ERROR);
         }
-        LoginUser loginUser = tokenUtil.getLoginUser(loginUserId);
         if (loginUser == null){
              throw new GlobalException("token失效，请重新登录");
         }
@@ -132,10 +132,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public void updateUserInfo(UserInfoVo userInfoVo,HttpServletRequest httpServletRequest) {
+    public void updateUserInfo(UserInfoVo userInfoVo) {
         Long loginUserId;
         try {
-            loginUserId = tokenUtil.getLoginUserId(httpServletRequest);
+            loginUserId = tokenUtil.getLoginUserId();
         } catch (Exception e) {
             throw new GlobalException("token非法");
         }
@@ -146,9 +146,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public void logout(HttpServletRequest httpServletRequest) {
+    public void logout() {
         try {
-            tokenUtil.deleteLoginUser(httpServletRequest);
+            tokenUtil.deleteLoginUser();
         } catch (Exception e) {
             throw new GlobalException("token 非法");
         }

@@ -26,11 +26,6 @@ public @interface Log {
     public BusinessType businessType() default BusinessType.OTHER;
 
 
-    /**
-     * 操作人员类别
-     **/
-    public String operatorType() default "other";
-
 
     /**
      * 是否保存请求参数

@@ -5,6 +5,7 @@ import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tangxs.bilibili.config.MinioConfig;
+import com.tangxs.bilibili.properties.MinioProperties;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
@@ -29,7 +30,7 @@ import java.util.List;
 public class MinioUtil {
 
     @Autowired
-    private MinioConfig prop;
+    private MinioProperties prop;
 
     @Resource
     private MinioClient minioClient;

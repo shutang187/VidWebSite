@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  **/
 @Slf4j
 @Component
-public class AdressUtil {
+public class AddressUtil {
 
     // IP地址查询
     public static final String IP_URL = "http://whois.pconline.com.cn/ipJson.jsp";

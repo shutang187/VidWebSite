@@ -18,6 +18,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -85,30 +86,42 @@ public class TokenUtil {
     }
 
     public Long getLoginUserId () throws Exception{
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        String token = requestAttributes.getRequest().getHeader(header);
+        HttpServletRequest request = getRequest();
+        String token = request.getHeader(header);
         Long userId = verifyToken(token);
         return userId;
     }
 
-
-    public LoginUser getLoginUser(HttpServletRequest request) throws Exception{
-        String token = request.getHeader(header);
-        Long userId = verifyToken(token);
-        if(userId != null && userId > 0){
-            LoginUser user = (LoginUser) redisCache.getCacheObject(getTokenKey(userId));
+    public LoginUser getLoginUser() throws Exception {
+        Long loginUserId = getLoginUserId();
+        if(loginUserId != null && loginUserId > 0){
+            LoginUser user = (LoginUser) redisCache.getCacheObject(getTokenKey(loginUserId));
             return user;
         }
         return null;
     }
 
-    public void deleteLoginUser(HttpServletRequest request) throws Exception{
+
+
+    public void deleteLoginUser() throws Exception{
+        HttpServletRequest request = getRequest();
         String token = request.getHeader(header);
         Long userId = verifyToken(token);
         if(userId != null && userId > 0){
            redisCache.deleteObject(getTokenKey(userId));
         }
     }
+
+    public static HttpServletRequest getRequest(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return requestAttributes.getRequest();
+    }
+
+    public HttpServletResponse getResponse(){
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        return requestAttributes.getResponse();
+    }
+
 
 
     public LoginUser getLoginUser(Long userId){
@@ -139,7 +152,7 @@ public class TokenUtil {
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
         String ip = IpUtil.getIpAddr(request);
         loginUser.setIpaddr(ip);
-        loginUser.setLoginLocation(AdressUtil.getRealAddressByIP(ip));
+        loginUser.setLoginLocation(AddressUtil.getRealAddressByIP(ip));
         loginUser.setBrowser(userAgent.getBrowser().getName());
         loginUser.setOs(userAgent.getOperatingSystem().getName());
     }

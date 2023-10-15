@@ -1,5 +1,7 @@
 package com.tangxs.bilibili.controller;
 
+import com.tangxs.bilibili.annotation.Log;
+import com.tangxs.bilibili.constant.enums.BusinessType;
 import com.tangxs.bilibili.domain.model.ResponseBean;
 import com.tangxs.bilibili.domain.vo.LoginUserVo;
 import com.tangxs.bilibili.domain.vo.UserInfoVo;
@@ -29,6 +31,7 @@ public class UserBasicController {
         return ResponseUtil.success();
     }
 
+
     @PostMapping("/login")
     public ResponseBean<String> login(@RequestBody LoginUserVo loginUserVo) throws Exception {
         String token = userService.login(loginUserVo);
@@ -36,20 +39,21 @@ public class UserBasicController {
     }
 
     @GetMapping("/getUserInfo")
-    public ResponseBean<UserInfoVo> getUserInfo(HttpServletRequest httpServletRequest){
-        UserInfoVo userInfoVo = userService.getCurrentUserInfo(httpServletRequest);
+    @Log(businessType = BusinessType.QUERY,title = "获取当前用户信息",isSaveRequestData = true)
+    public ResponseBean<UserInfoVo> getUserInfo(){
+        UserInfoVo userInfoVo = userService.getCurrentUserInfo();
         return ResponseUtil.success(userInfoVo);
     }
 
     @PostMapping("/updateUserInfo")
-    public ResponseBean updateUserInfo(@RequestBody UserInfoVo userInfoVo,HttpServletRequest httpServletRequest){
-        userService.updateUserInfo(userInfoVo,httpServletRequest);
+    public ResponseBean updateUserInfo(@RequestBody UserInfoVo userInfoVo){
+        userService.updateUserInfo(userInfoVo);
         return ResponseUtil.success();
     }
 
     @GetMapping("/logout")
-    private ResponseBean logout(HttpServletRequest httpServletRequest){
-        userService.logout(httpServletRequest);
+    private ResponseBean logout(){
+        userService.logout();
         return ResponseUtil.success();
     }
 

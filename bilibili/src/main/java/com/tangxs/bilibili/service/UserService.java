@@ -20,9 +20,9 @@ public interface UserService extends IService<User> {
 
     String login(LoginUserVo loginUserVo) throws Exception;
 
-    UserInfoVo getCurrentUserInfo(HttpServletRequest httpServletRequest);
+    UserInfoVo getCurrentUserInfo();
 
-    void updateUserInfo(UserInfoVo userInfoVo,HttpServletRequest httpServletRequest);
+    void updateUserInfo(UserInfoVo userInfoVo);
 
-    void logout(HttpServletRequest httpServletRequest);
+    void logout();
 }
